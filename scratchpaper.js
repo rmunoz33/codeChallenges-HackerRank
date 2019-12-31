@@ -1,72 +1,61 @@
-let n = 1;
-let password = '9';
+let s = 'cwomzxmuelmangtosqkgfdqvkzdnxerhravxndvomhbokqmvsfcaddgxgwtpgpqrmeoxvkkjunkbjeyteccpugbkvhljxsshpoymkryydtmfhaogepvbwmypeiqumcibjskmsrpllgbvc';
 
-// 
+// convert string to array
+let sArray = s.split("");
 
-let numbers = "0123456789";
-let lower_case = "abcdefghijklmnopqrstuvwxyz";
-let upper_case = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-let special_characters = "!@#$%^&*()-+";
+// find unique elements
 
-// It contains at least one digit.
+let unique = [];
 
-let num_cnt = 0;
-
-for (let i = 0; i < password.length; i++) {
-    if (numbers.includes(password[i])) {
-        num_cnt++;
+for (let i = 0; i < sArray.length; i++) {
+    if (unique.includes(sArray[i])) {
+        unique = unique;
     } else {
-        num_cnt = num_cnt;
-    };
+        unique.push(sArray[i]);
+    }
 }
 
-// It contains at least one lowercase English character.
+// set default result to zero
+let result = 0;
 
-let lower_case_cnt = 0;
 
-for (let i = 0; i < password.length; i++) {
-    if (lower_case.includes(password[i])) {
-        lower_case_cnt++;
+for (let i = 0; i < unique.length; i++) {
+    
+    for (let j = 0; j < unique.length; j++) {
+        // set default validation to true
+        let valid = true;
+        // find all variations of each unique pair of elements
+        let tempArray = sArray.filter(person => person == unique[i] || person == unique[j]);
+    
+        for (let k = 0; k < tempArray.length; k++) {
+            
+            if (tempArray[k] == tempArray[k + 1]) {
+                // if two consecutive elements are the same, change validation to false
+                valid = false;
+            } else {
+                valid = valid;
+            }
+        }
+        // if the array is still valid AND it is longer than result, make it the new result
+        if (valid && tempArray.length > result) {
+            result = tempArray.length;
+        } else {
+            result = result;
+        }
+    }
+}
+
+// accounting for when input string is only one or two characters long
+if (s.length < 3) {
+    if (s.length == 1) {
+        return 0;
     } else {
-        lower_case_cnt = lower_case_cnt;
-    };
+        return s.length;
+    }
+} else {
+    return result;
 }
 
-// It contains at least one uppercase English character.
+// find every combination of only two of the string's letters
 
-let upper_case_cnt = 0;
-
-for (let i = 0; i < password.length; i++) {
-    if (upper_case.includes(password[i])) {
-        upper_case_cnt++;
-    } else {
-        upper_case_cnt = upper_case_cnt;
-    };
-}
-
-// It contains at least one special character. The special characters are: !@#$%^&*()-+
-
-let special_characters_cnt = 0;
-
-for (let i = 0; i < password.length; i++) {
-    if (special_characters.includes(password[i])) {
-        special_characters_cnt++;
-    } else {
-        special_characters_cnt = special_characters_cnt;
-    };
-}
-
-// Its length is at least 6.
-
-let required_cnt = (num_cnt + lower_case_cnt + upper_case_cnt + special_characters_cnt);
-let missing = (num_cnt === 0 ? 1 : 0) + (lower_case_cnt === 0 ? 1 : 0) + (upper_case_cnt === 0 ? 1 : 0) + (special_characters_cnt === 0 ? 1 : 0);
-
-if (missing === 0 && n >= 6) {
-    return (0);
-} else if (missing === 0 && n < 6) {
-    return (6 - n);
-} else if (missing !== 0 && n >= 6) {
-    return (missing);
-} else if (missing !== 0 && n < 6) {
-    return (missing > (6 - n) ? missing : (6 - n));
-}
+// not valid if letter repeats consecutively at any point
